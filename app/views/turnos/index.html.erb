@@ -1,0 +1,107 @@
+<div class="container">
+  <h1>Control de Asistencia</h1>
+
+  <!-- Formulario de Entrada -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Registrar Entrada</h4>
+    </div>
+    <div class="card-body">
+      <%= form_tag registrar_entrada_turnos_path, method: :post do %>
+        <div class="form-group mb-3">
+          <%= label_tag :empleado, "Empleado" %>
+          <%= text_field_tag :empleado, nil, class: "form-control", required: true %>
+        </div>
+
+        <div class="form-group mb-3">
+          <%= label_tag :turno_tipo, "Tipo de Turno" %>
+          <%= select_tag :turno_tipo, 
+              options_for_select([
+                ['Matutino (9:00 - 17:00)', 'matutino'],
+                ['Vespertino (15:00 - 23:00)', 'vespertino'],
+                ['Nocturno (23:00 - 7:00)', 'nocturno']
+              ]), 
+              class: "form-control" %>
+        </div>
+
+        <%= submit_tag "Registrar Entrada", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Formulario de Salida -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Registrar Salida</h4>
+    </div>
+    <div class="card-body">
+      <%= form_tag registrar_salida_turnos_path, method: :post do %>
+        <div class="form-group mb-3">
+          <%= label_tag :empleado, "Empleado" %>
+          <%= text_field_tag :empleado, nil, class: "form-control", required: true %>
+        </div>
+        <%= submit_tag "Registrar Salida", class: "btn btn-danger" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Tabla de Registros -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Registros de Turnos</h4>
+    </div>
+    <div class="card-body">
+      <% if @turnos.present? %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Empleado</th>
+                <th>Fecha</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Turno</th>
+                <th>Estado</th>
+                <th class="text-center">Retardos</th>
+                <th class="text-center">Faltas</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @turnos.each do |turno| %>
+                <tr class="<%= turno_row_class(turno) %>">
+                  <td><%= turno.empleado %></td>
+                  <td><%= turno.fecha&.strftime("%d/%m/%Y") %></td>
+                  <td><%= turno.hora_entrada&.strftime("%H:%M") %></td>
+                  <td><%= turno.hora_salida&.strftime("%H:%M") if turno.hora_salida.present? %></td>
+                  <td><%= turno_tipo_badge(turno.turno_tipo) %></td>
+                  <td>
+                    <%= content_tag :span, turno.estado.titleize, 
+                        class: "badge #{estado_class(turno.estado)}" %>
+                  </td>
+                  <td class="text-center">
+                    <%= content_tag :span, turno.retardos_count || 0, 
+                        class: "badge #{turno.retardos_count.to_i > 0 ? 'bg-warning' : 'bg-secondary'}" %>
+                  </td>
+                  <td class="text-center">
+                    <%= content_tag :span, turno.faltas_count || 0, 
+                        class: "badge #{turno.faltas_count.to_i > 0 ? 'bg-danger' : 'bg-secondary'}" %>
+                  </td>
+                  <td>
+                    <%= link_to "Ver Detalles", 
+                        detalles_turnos_path(empleado: turno.empleado), 
+                        class: "btn btn-sm btn-primary" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="alert alert-info">
+          No hay turnos registrados.
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

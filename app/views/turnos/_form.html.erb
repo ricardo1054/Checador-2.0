@@ -1,0 +1,28 @@
+<%= form_with(model: turno, local: true) do |f| %>
+    <% if turno.errors.any? %>
+      <div class="alert alert-danger">
+        <h2><%= pluralize(turno.errors.count, "error") %> impidieron guardar este turno:</h2>
+        <ul>
+          <% turno.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <!-- Mantén los campos existentes -->
+  
+    <div class="form-group">
+      <%= f.label :turno_tipo, "Tipo de Turno" %>
+      <%= f.select :turno_tipo, 
+                   options_for_select([
+                     ['Matutino', 'matutino'], 
+                     ['Vespertino', 'vespertino'], 
+                     ['Nocturno', 'nocturno']
+                   ], @turno.turno_tipo), 
+                   { include_blank: 'Seleccione un turno' }, 
+                   class: 'form-control' %>
+    </div>
+  
+    <!-- Mantén el resto de los campos -->
+  </div>

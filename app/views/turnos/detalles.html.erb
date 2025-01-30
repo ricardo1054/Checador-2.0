@@ -1,0 +1,66 @@
+<div class="container">
+  <h2>Historial de Asistencias - <%= @empleado %></h2>
+
+  <% if @turnos.present? %>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Turno</th>
+            <th>Estado</th>
+            <th class="text-center">Retardos</th>
+            <th class="text-center">Faltas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @turnos.each do |turno| %>
+            <tr class="<%= turno_row_class(turno) %>">
+              <td><%= turno.fecha&.strftime("%d/%m/%Y") %></td>
+              <td><%= turno.hora_entrada&.strftime("%H:%M") %></td>
+              <td><%= turno.hora_salida&.strftime("%H:%M") if turno.hora_salida.present? %></td>
+              <td><%= turno_tipo_badge(turno.turno_tipo) %></td>
+              <td>
+                <%= content_tag :span, turno.estado.titleize, 
+                    class: "badge #{estado_class(turno.estado)}" %>
+              </td>
+              <td class="text-center">
+                <%= content_tag :span, turno.retardos_count || 0, 
+                    class: "badge #{turno.retardos_count.to_i > 0 ? 'bg-warning' : 'bg-secondary'}" %>
+              </td>
+              <td class="text-center">
+                <%= content_tag :span, turno.faltas_count || 0, 
+                    class: "badge #{turno.faltas_count.to_i > 0 ? 'bg-danger' : 'bg-secondary'}" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Resumen de totales -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <h4>Resumen</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Total Retardos: <span class="badge bg-warning"><%= @retardos %></span></h5>
+          </div>
+          <div class="col-md-6">
+            <h5>Total Faltas: <span class="badge bg-danger"><%= @faltas %></span></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      No hay registros para este empleado.
+    </div>
+  <% end %>
+
+  <%= link_to "Volver", turnos_path, class: "btn btn-secondary mt-3" %>
+</div>

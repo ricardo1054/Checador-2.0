@@ -1,0 +1,38 @@
+<div class="container mt-4">
+  <h2>Detalles del Empleado: <%= @empleado %></h2>
+  
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4>Contadores</h4>
+      <p class="mb-2">
+        <span class="badge bg-warning">Retardos: <%= @retardos %></span>
+        <span class="badge bg-danger ms-2">Faltas: <%= @faltas %></span>
+      </p>
+    </div>
+  </div>
+
+  <h4>Historial de Turnos</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Entrada</th>
+        <th>Salida</th>
+        <th>Turno</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @turnos.each do |turno| %>
+        <tr>
+          <td><%= turno.fecha %></td>
+          <td><%= turno.hora_entrada&.strftime("%H:%M") %></td>
+          <td><%= turno.hora_salida&.strftime("%H:%M") %></td>
+          <td><%= turno_tipo_badge(turno.turno_tipo) %></td>
+          <td><%= turno.estado %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to "Volver", turnos_path, class: "btn btn-primary" %>
+</div>

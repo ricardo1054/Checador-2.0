@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  empleado: MyString
+  fecha: 2025-01-26
+  hora_entrada: 2025-01-26 14:02:24
+  hora_salida: 2025-01-26 14:02:24
+
+two:
+  empleado: MyString
+  fecha: 2025-01-26
+  hora_entrada: 2025-01-26 14:02:24
+  hora_salida: 2025-01-26 14:02:24

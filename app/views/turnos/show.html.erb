@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Detalles del Turno</h2>
+  </div>
+
+  <div class="card-body">
+    <p><strong>Empleado:</strong> <%= @turno.empleado %></p>
+    <p><strong>Tipo de Turno:</strong> <%= @turno.turno_tipo&.titleize %></p>
+    <p><strong>Fecha:</strong> <%= l @turno.fecha, format: :long %></p>
+    <p><strong>Hora de Entrada:</strong> <%= @turno.hora_entrada.strftime("%H:%M") %></p>
+    <p><strong>Hora de Salida:</strong> <%= @turno.hora_salida.strftime("%H:%M") %></p>
+    
+    <p>
+      <strong>Estado:</strong> 
+      <span class="<%= @turno.estado == 'exitoso' ? 'text-success' : 
+                      @turno.estado == 'retardo' ? 'text-warning' : 'text-danger' %>">
+        <%= @turno.estado&.upcase %>
+      </span>
+    </p>
+    
+    <% if @turno.retardos_count && @turno.retardos_count > 0 %>
+      <p><strong>Retardos Acumulados:</strong> <%= @turno.retardos_count %></p>
+    <% end %>
+    
+    <% if @turno.faltas_count && @turno.faltas_count > 0 %>
+      <p><strong>Faltas Acumuladas:</strong> <%= @turno.faltas_count %></p>
+    <% end %>
+  </div>
+</div>
